@@ -15,6 +15,7 @@ TABLES = [
     "services",
     "usernames",
     "email_addresses",
+    "processed_files",
 ]
 
 
@@ -62,6 +63,14 @@ def create_tables(conn):
             id BIGSERIAL PRIMARY KEY,
             record_id BIGINT REFERENCES records(id) ON DELETE CASCADE,
             email TEXT
+        );
+        """,
+        """
+        CREATE TABLE IF NOT EXISTS processed_files (
+            filename TEXT PRIMARY KEY,
+            processed_at TIMESTAMPTZ DEFAULT NOW(),
+            success BOOLEAN NOT NULL,
+            error_msg TEXT
         );
         """,
     ]

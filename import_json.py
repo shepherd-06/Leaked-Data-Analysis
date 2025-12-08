@@ -32,21 +32,6 @@ logging.basicConfig(
 )
 
 
-def ensure_processed_files_table(conn):
-    """Create tracking table for processed files if it doesn't exist."""
-    ddl = """
-    CREATE TABLE IF NOT EXISTS processed_files (
-        filename TEXT PRIMARY KEY,
-        processed_at TIMESTAMPTZ DEFAULT NOW(),
-        success BOOLEAN NOT NULL,
-        error_msg TEXT
-    );
-    """
-    with conn.cursor() as cur:
-        cur.execute(ddl)
-        conn.commit()
-
-
 def file_already_processed(conn, filename: str) -> bool:
     """Check if this file has been processed before (success or fail)."""
     with conn.cursor() as cur:
@@ -124,8 +109,7 @@ def process_one_file(conn, filepath: Path) -> int:
         # Check if record is new or already existed
         inserted_main = cur.rowcount  # 1 if inserted, 0 if already existed
 
-        # Insert related rows regardless; if you want to avoid duplicates,
-        # you can add unique constraints + ON CONFLICT in those tables too.
+        # Insert related rows (you may want UNIQUE + ON CONFLICT in those tables later)
         for pw in passwords:
             cur.execute(
                 "INSERT INTO passwords (record_id, password) VALUES (%s, %s);",
@@ -172,7 +156,6 @@ def main():
         return
 
     conn = psycopg2.connect(**DB_CONFIG)
-    ensure_processed_files_table(conn)
 
     success_records = 0
     processed_files = 0
