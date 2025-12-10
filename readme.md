@@ -32,25 +32,27 @@ This repository only contains scripts for local parsing and analysis.
 
 ## Purpose
 
-The goal of this project is to analyze how malware-infected devices leak sensitive information—such as:
-
-- stored credentials
-- domain names
-- services accessed
-- usernames
-- emails
+The project explores how credential-stealing malware extracts sensitive information from infected machines.
+After cleaning and loading the raw JSON files, the pipeline enables analysis of:
+- stored passwords
+- domain names & services accessed
+- email addresses & usernames
 - IP address metadata
+- weak-password patterns
+- ecosystem exposure (Google, Meta, Microsoft)
+- country-level behavior
 
-and to derive patterns, statistics, and correlations using data visualization tools.
+Tableau / Power BI dashboards can then be built over the cleaned dataset to reveal:
+- regional exposure patterns
+- password habits
+- high-frequency service domains
+- relationships between services and user behavior
 
-Specifically, this project aims to:
+## Example Visual Insights
 
-1. Convert raw JSON files into structured relational tables
-2. Enable large-scale querying inside PostgreSQL
-3. Perform exploratory analysis in Python
-4. Export clean datasets for visualization
-5. Build Tableau & Power BI dashboards to reveal trends such as:
-    - geographic distribution of infections
-    - frequency of password reuse
-    - relationships between services, domains, and credentials
-    - temporal patterns in leaks
+### Top 30 Domains Observed in Leaks
+![Top Domains](example_graphs/insight_1.png)
+
+### Top 15 Countries by Number of Leaked Records (2019–2022)
+![Top Countries](example_graphs/insight_2.png)
+
